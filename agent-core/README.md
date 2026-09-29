@@ -116,3 +116,19 @@ AgentCore 會正規化 `started`、`text`、`tool-start`、`tool-end`、`usage`�
 呼叫端可在建立 AgentCore 時注入 harness adapter。任意 CLI arguments 不直接開放，避免繞過 manifest 的工具和權限設定。
 
 詳細的 runtime 差異見 [執行與工具契約](docs/runtime-and-tools.md)，內部模組責任見 [架構](docs/architecture.md)。
+
+## 0.1 命名遷移
+
+早期開發版本使用 `agent-engine` 名稱。更新後請調整：
+
+| 舊名稱 | 新名稱 |
+|---|---|
+| package / directory `agent-engine` | `agent-core` |
+| `createAgentEngine()` | `createAgentCore()` |
+| `Engine` / `EngineConfig` | `AgentCore` / `AgentCoreConfig` |
+| `EngineError` / `EngineErrorKind` | `AgentCoreError` / `AgentCoreErrorKind` |
+| `AGENT_ENGINE_ROOT` | `AGENT_CORE_ROOT` |
+| `.agent-engine/artifacts` | `.agent-core/artifacts` |
+| `agent-engine-gateway` | `agent-core-gateway` |
+
+TypeScript API 與 `AGENT_ENGINE_ROOT` 暫時保留相容 alias／fallback。既有 artifact 不會自動搬移；需要延續時請將 `.agent-engine/artifacts` 搬到 `.agent-core/artifacts`。若 prompt 寫死 MCP tool 全名，也要把 `mcp__agent-engine-gateway__` 改成 `mcp__agent-core-gateway__`。

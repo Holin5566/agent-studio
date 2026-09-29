@@ -108,7 +108,7 @@ await runTerminal(agent);
 - 對外不使用 `Engine` 表示 Agent 執行核心，統一稱為 `AgentCore`。
 - 包裝外部 CLI（Claude Code / Codex）或自建 loop 的低階載體統一稱為 `Runtime`（如 `SpawnRuntime`）。
 - `Adapter` 只用於 Desk 或 AgentCore 內部的協議轉換，不作為主要公開概念。
-- 通訊狀態統一稱為 `Case`（或 `Session`）；平台 thread 只是 Dispatch 中的外部識別資訊。
+- 通訊狀態統一稱為 `Case`；平台 thread 只是 Dispatch 中的外部識別資訊。
 - MCP tool 與本機 function 對 Agent 都呈現為 `Capability`。
 - 可查詢的知識來源統一稱為 `Archive`。
 

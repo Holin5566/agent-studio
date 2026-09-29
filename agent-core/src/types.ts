@@ -158,7 +158,7 @@ export type StopReason =
   | 'max_output'
   /**
    * 額度用盡。**跟其他終止原因不同:它不值得 salvage,也不可重試** ——
-   * 要等重置。對應 `EngineErrorKind: 'quota'`。
+   * 要等重置。對應 `AgentCoreErrorKind: 'quota'`。
    */
   | 'quota'
   /** agent 拒絕繼續。 */
@@ -245,7 +245,7 @@ export type RunEvent = EventMeta & (
   | { type: 'tool-end'; toolCallId: string; toolId?: string; ok: boolean; elapsedMs: number }
   | { type: 'usage'; mode: 'delta' | 'cumulative'; usage: Usage }
   | { type: 'completed'; status: TakeStatus; stopReason: StopReason; elapsedMs: number;
-      error?: EngineError; artifact?: ArtifactRef; cleanup: 'complete' | 'unconfirmed' }
+      error?: AgentCoreError; artifact?: ArtifactRef; cleanup: 'complete' | 'unconfirmed' }
 );
 
 // ─── 錯誤 ────────────────────────────────────────────────────────────────
@@ -256,7 +256,7 @@ export type RunEvent = EventMeta & (
  * 被預算砍斷**不在這裡** —— 那是 `status: 'truncated'`,而且可能被 salvage
  * 救成 `ok`。
  */
-export type EngineErrorKind =
+export type AgentCoreErrorKind =
   /** manifest 寫錯、工具 id 不存在。修設定,不重試。 */
   | 'config'
   /** 選定 runtime 給不起 manifest 要的能力。換 agent 或裝東西,不重試。 */
@@ -275,14 +275,14 @@ export type EngineErrorKind =
   /** 使用者取消。不算失敗。 */
   | 'cancelled';
 
-export class EngineError extends Error {
+export class AgentCoreError extends Error {
   constructor(
-    readonly kind: EngineErrorKind,
+    readonly kind: AgentCoreErrorKind,
     message: string,
     readonly cause?: unknown,
   ) {
     super(message);
-    this.name = 'EngineError';
+    this.name = 'AgentCoreError';
   }
 }
 
@@ -374,7 +374,7 @@ export interface TakeResult {
   artifact?: ArtifactRef;
   /** 清理期限內未確認完成時不可宣稱資源已停止。 */
   cleanup: 'complete' | 'unconfirmed';
-  error?: EngineError;
+  error?: AgentCoreError;
   /** 這一輪為什麼停。`status` 是粗分類,這個是原因。 */
   stopReason: StopReason;
   /** 被預算砍斷但被 `salvage` 救回時為 true(此時 `status` 是 `ok`)。 */
@@ -441,14 +441,14 @@ export interface AgentCoreConfig {
 /**
  * **建立時不做任何 IO**:manifest 在每個 agent 第一次 `runTake` 時才載入並驗證,所以宿主
  * 可以在 module 頂層 `export const core = createAgentCore(...)`,import 沒有副作用。
- * 一份 manifest 壞掉只讓那個 agent 的 take 被拒(`EngineError` config / capability,
+ * 一份 manifest 壞掉只讓那個 agent 的 take 被拒(`AgentCoreError` config / capability,
  * 在 spawn 之前),同一個 engine 上的其他 agent 照常。
  */
 export interface AgentCore {
-  /** agent 的 manifest 載入或驗證失敗 → reject `EngineError`(不發事件、不 spawn),修好檔案下次會重試。 */
+  /** agent 的 manifest 載入或驗證失敗 → reject `AgentCoreError`(不發事件、不 spawn),修好檔案下次會重試。 */
   runTake(spec: TakeSpec): Promise<TakeResult>;
   /**
-   * 立刻載入並驗證全部 agent(有 `agentIds` 就只驗那幾個),失敗丟 `EngineError`。
+   * 立刻載入並驗證全部 agent(有 `agentIds` 就只驗那幾個),失敗丟 `AgentCoreError`。
    * 給宿主在 boot 時 fail fast;回傳驗過的 agent id。
    */
   check(): string[];
@@ -461,3 +461,9 @@ export type Engine = AgentCore;
 
 /** @deprecated 使用 `AgentCoreConfig`。 */
 export type EngineConfig = AgentCoreConfig;
+
+/** @deprecated 使用 `AgentCoreErrorKind`。 */
+export type EngineErrorKind = AgentCoreErrorKind;
+
+/** @deprecated 使用 `AgentCoreError`。 */
+export { AgentCoreError as EngineError };

@@ -73,7 +73,7 @@ describe('基本執行', () => {
 
   it('執行檔不存在是 runtime 錯誤,訊息指得出是哪個指令', async () => {
     await expect(execRuntime({ command: { file: 'definitely-not-a-real-binary-xyz', args: [] } }))
-      .rejects.toMatchObject({ name: 'EngineError', kind: 'runtime' });
+      .rejects.toMatchObject({ name: 'AgentCoreError', kind: 'runtime' });
   });
 });
 

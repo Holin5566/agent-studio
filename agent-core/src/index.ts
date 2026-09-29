@@ -18,6 +18,7 @@ export type {
   EngineConfig,
   AgentCore,
   AgentCoreConfig,
+  AgentCoreErrorKind,
   EngineErrorKind,
   PlanEntry,
   RunEvent,
@@ -32,7 +33,7 @@ export type {
   Usage,
 } from './types.js';
 
-export { EngineError, EngineError as AgentCoreError } from './types.js';
+export { AgentCoreError, EngineError } from './types.js';
 export { statusFor, isSalvageable } from './run/status.js';
 export { createAgentCore, createAgentEngine } from './engine.js';
 export { createMemoryStore } from './artifacts/memory.js';
@@ -53,4 +54,3 @@ export { GATEWAY_SERVER_NAME } from './shared/names.js';
 export { createClaudeDecoder } from './runtimes/claudeStream.js';
 export { codexCli, createCodexCli, sandboxFor } from './runtimes/codexCli.js';
 export type { CodexCliOptions } from './runtimes/codexCli.js';
-
