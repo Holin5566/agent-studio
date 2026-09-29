@@ -456,7 +456,7 @@ export interface Engine {
   close(): Promise<void>;
 }
 
-/** Agent Studio 對外的執行核心。`Engine` 保留為舊版相容名稱。 */
+/** JackIn 對外的執行核心。`Engine` 保留為舊版相容名稱。 */
 export type AgentCore = Engine;
 
 /** 建立 AgentCore 的設定。`EngineConfig` 保留為舊版相容名稱。 */

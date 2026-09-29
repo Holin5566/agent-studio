@@ -1,8 +1,8 @@
-# Agent Studio
+# JackIn
 
-Agent Studio 目前是一組 TypeScript 套件，用來從後端程式啟動一次 CLI Agent 執行，並限制它可使用的 MCP 工具。
+JackIn 目前是一組 TypeScript 套件，用來從後端程式啟動一次 CLI Agent 執行，並限制它可使用的 MCP 工具。
 
-長期希望把它發展成通訊軟體 Agent 的共用 library，讓不同服務共用執行、工具權限、知識檢索與 Slack／Teams 等通訊介面。不過這些能力大多仍在規劃中；目前專案還不是完整的通訊服務框架。
+長期希望把它發展成通訊軟體 Agent 的賽博派案與執行框架（cybernetic dispatch & execution framework），讓不同服務共用執行、工具權限、知識檢索與 Slack／Teams 等通訊介面。不過這些能力大多仍在規劃中；目前專案還不是完整的通訊服務框架。
 
 ## 現有範圍
 

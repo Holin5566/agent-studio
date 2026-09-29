@@ -98,7 +98,7 @@ export class FileOAuthProvider implements OAuthClientProvider {
 
   get clientMetadata(): OAuthClientMetadata {
     return {
-      client_name: `agent-studio mcp-hub (${this.serverId})`,
+      client_name: `jackin mcp-hub (${this.serverId})`,
       redirect_uris: [this.redirectUrl],
       grant_types: ['authorization_code', 'refresh_token'],
       response_types: ['code'],

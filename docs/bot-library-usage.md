@@ -152,7 +152,7 @@ Archive 可以透過 `knowledge-search`、`knowledge-get` 等 MCP 工具提供�
 Bot 組合 Director、Agent 與 conversation policy，不重複宣告 Agent 的 runtime 或 tools。
 
 ```yaml
-apiVersion: agent-studio/v1
+apiVersion: jackin/v1
 kind: Bot
 
 metadata:
@@ -187,7 +187,7 @@ spec:
 預計指令：
 
 ```bash
-agent-studio chat --bot jira-helper
+jackin chat --bot jira-helper
 ```
 
 ```text
@@ -225,7 +225,7 @@ ISSUE-1234 主要包含三項需求……
 ### 單次 Agent
 
 ```bash
-agent-studio run --agent code-tracer --prompt "找出登入入口"
+jackin run --agent code-tracer --prompt "找出登入入口"
 ```
 
 直接測試 `agent-core.runTake()`，適合驗證 Agent manifest、harness、MCP、事件、逾時與 artifact。
@@ -233,7 +233,7 @@ agent-studio run --agent code-tracer --prompt "找出登入入口"
 ### Bot 對話
 
 ```bash
-agent-studio chat --bot incident-helper
+jackin chat --bot incident-helper
 ```
 
 走完整的 Terminal Desk、Agency、Dispatcher 與 AgentCore，適合測試多輪對話、使用者補充、進度、取消和 approval。
@@ -241,7 +241,7 @@ agent-studio chat --bot incident-helper
 ### Eval
 
 ```bash
-agent-studio eval --bot incident-helper
+jackin eval --bot incident-helper
 ```
 
 重播固定案例，優先驗證可確定的行為：
@@ -261,7 +261,7 @@ agent-studio eval --bot incident-helper
 Terminal 測試不能預設略過權限。啟動時指定測試身分與環境：
 
 ```bash
-agent-studio chat \
+jackin chat \
   --bot incident-helper \
   --as oncall \
   --tenant local \
@@ -315,13 +315,13 @@ Approve? [y]es / [n]o / [d]etails
 預設模式只顯示終端使用者會看到的訊息：
 
 ```bash
-agent-studio chat --bot incident-helper
+jackin chat --bot incident-helper
 ```
 
 開發模式顯示執行事件：
 
 ```bash
-agent-studio chat --bot incident-helper --debug
+jackin chat --bot incident-helper --debug
 ```
 
 ```text
@@ -335,9 +335,9 @@ agent-studio chat --bot incident-helper --debug
 需要完整紀錄時輸出 JSONL：
 
 ```bash
-agent-studio chat \
+jackin chat \
   --bot incident-helper \
-  --trace .agent-studio/traces/session.jsonl
+  --trace .jackin/traces/session.jsonl
 ```
 
 Trace 預設不得記錄 credential、完整敏感參數或未遮罩個資。
@@ -347,8 +347,8 @@ Trace 預設不得記錄 credential、完整敏感參數或未遮罩個資。
 預計允許保存與繼續本機 session：
 
 ```bash
-agent-studio chat --bot incident-helper --session ./sessions/incident-001.json
-agent-studio chat --bot incident-helper --resume ./sessions/incident-001.json
+jackin chat --bot incident-helper --session ./sessions/incident-001.json
+jackin chat --bot incident-helper --resume ./sessions/incident-001.json
 ```
 
 對話紀錄應分開保存：
@@ -399,7 +399,7 @@ interface ChannelCapabilities {
 Terminal 可以用 channel profile 模擬 Slack 或其他平台限制：
 
 ```bash
-agent-studio chat --bot incident-helper --channel-profile slack
+jackin chat --bot incident-helper --channel-profile slack
 ```
 
 這可以在真正部署前發現訊息過長、無法更新進度或互動元件不能降級等問題。

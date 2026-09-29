@@ -1,4 +1,4 @@
-# Agent Studio 架構
+# JackIn 架構
 
 ```text
 Agency（CLI 或服務）

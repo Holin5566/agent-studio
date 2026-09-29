@@ -1,6 +1,6 @@
 # 核心命名與責任邊界
 
-本文件記錄 Agent Studio 的正式詞彙。公開 API、套件、目錄與後續文件以這套名稱為準。
+本文件記錄 JackIn 的正式詞彙。公開 API、套件、目錄與後續文件以這套名稱為準。
 
 ## 核心
 
@@ -18,7 +18,7 @@ AgentCore 定義「怎麼執行 Agent」，負責完成一次 take：
 - 取消、逾時與停止原因
 - usage 與執行產物
 
-地端或裸模型由 Agent Studio 提供 tool loop 包裝成 AgentCore；開發者也可以實作共同介面後自行注入。Model 只有這類 AgentCore 需要，並非所有 Agent 的必要依賴。
+地端或裸模型由 JackIn 提供 tool loop 包裝成 AgentCore；開發者也可以實作共同介面後自行注入。Model 只有這類 AgentCore 需要，並非所有 Agent 的必要依賴。
 
 目前套件名稱為 `agent-core`，主要入口為 `createAgentCore()`。
 
@@ -103,22 +103,24 @@ await runTerminal(agent);
 
 ## 命名規則
 
+- 專案與頂層框架名稱為 **JackIn**，概念為賽博調度與接入中樞（Patcher / Rig）。
 - 對外不建立 `Bot` 類別；Bot 是產品用途，不是必要的程式抽象。
-- 對外不使用 `Engine` 或 `Runtime` 表示 Agent 執行核心，統一稱為 `AgentCore`。
+- 對外不使用 `Engine` 表示 Agent 執行核心，統一稱為 `AgentCore`。
+- 包裝外部 CLI（Claude Code / Codex）或自建 loop 的低階載體統一稱為 `Runtime`（如 `SpawnRuntime`）。
 - `Adapter` 只用於 Desk 或 AgentCore 內部的協議轉換，不作為主要公開概念。
-- 通訊狀態統一稱為 `Case`；平台 thread 只是 Dispatch 中的外部識別資訊。
+- 通訊狀態統一稱為 `Case`（或 `Session`）；平台 thread 只是 Dispatch 中的外部識別資訊。
 - MCP tool 與本機 function 對 Agent 都呈現為 `Capability`。
 - 可查詢的知識來源統一稱為 `Archive`。
 
-CLI 命令仍使用直接的動詞：
+CLI 命令使用直接的動詞：
 
 ```text
-agent-studio chat
-agent-studio serve
-agent-studio check
-agent-studio eval
-agent-studio inspect
-agent-studio auth
+jackin chat
+jackin serve
+jackin check
+jackin eval
+jackin inspect
+jackin auth
 ```
 
 ## 實作順序

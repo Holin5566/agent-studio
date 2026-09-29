@@ -1,8 +1,8 @@
 {
-  "name": "agent-studio",
+  "name": "jackin",
   "version": "0.2.0",
   "private": true,
-  "description": "Agent core and MCP gateway for building messaging agents",
+  "description": "JackIn: Cybernetic dispatch and execution framework for autonomous agents",
   "scripts": {
     "setup": "npm --prefix mcp-hub ci && npm --prefix agent-core ci",
     "build": "npm --prefix agent-core run build",
