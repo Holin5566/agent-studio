@@ -1,0 +1,6 @@
+{"type":"system","subtype":"init","tools":["Bash"],"model":"test-model"}
+{"type":"assistant","message":{"content":[{"type":"tool_use","id":"toolu_test_001","name":"Bash","input":{"command":"printf marker-abc"}}]}}
+{"type":"rate_limit_event","rate_limit_info":{"status":"allowed"}}
+{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"toolu_test_001","content":"marker-abc","is_error":false}]}}
+{"type":"assistant","message":{"content":[{"type":"text","text":"marker-abc"}]}}
+{"type":"result","subtype":"success","result":"marker-abc","stop_reason":"end_turn","is_error":false,"usage":{"input_tokens":12,"output_tokens":3}}

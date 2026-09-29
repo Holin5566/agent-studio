@@ -1,0 +1,5 @@
+{
+  "id": "sample-agent",
+  "tools": [],
+  "promptFile": "prompts/example.md"
+}

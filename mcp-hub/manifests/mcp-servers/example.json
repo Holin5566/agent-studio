@@ -1,0 +1,16 @@
+{
+  "id": "server 的 id,agent manifest 不直接用它;tool id 才是允許清單用的名字",
+  "transport": "stdio / sse / streamable-http / in-memory(in-memory 只給 openGateway 的 builtinTools)",
+  "command": "stdio:要執行的指令,例如 uvx",
+  "args": ["stdio:參數;可用 ${VAR}(必填)、${VAR:-}(可空)、${VAR:-預設}"],
+  "env": { "NAME": "stdio:只傳這些給子程序(加上 SDK 的預設環境);值必須是字串,可用 ${VAR}" },
+  "url": "sse / streamable-http:上游網址",
+  "auth": { "type": "oauth", "store": "token 檔名(省略 = id)", "scope": "要求的 scope(選填)" },
+  "timeoutMs": "單次 tools/call 的逾時毫秒(省略 = SDK 預設 60000)",
+  "maxTotalTimeoutMs": "有進度回報時的總上限毫秒(省略 = 無上限;不可小於 timeoutMs)",
+  "connectTimeoutMs": "連線握手(initialize)的逾時毫秒(省略 = SDK 預設 60000;uvx 冷啟動要調長)",
+  "tools": {
+    "對外 tool id": "上游 tools/list 的實際名稱(npm run check -- --list-tools 會印出來)",
+    "另一個 tool id": { "toolName": "上游工具名", "description": "覆寫給模型看的說明(選填)" }
+  }
+}
