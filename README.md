@@ -2,7 +2,7 @@
 
 Agent Studio 目前是一組 TypeScript 套件，用來從後端程式啟動一次 CLI Agent 執行，並限制它可使用的 MCP 工具。
 
-長期希望把它發展成通訊軟體 Bot 的共用 library，讓不同 Bot 共用執行、工具權限、知識檢索與 Slack／Teams 等通訊介面。不過這些能力大多仍在規劃中；目前專案還不是完整的 Bot framework。
+長期希望把它發展成通訊軟體 Agent 的共用 library，讓不同服務共用執行、工具權限、知識檢索與 Slack／Teams 等通訊介面。不過這些能力大多仍在規劃中；目前專案還不是完整的通訊服務框架。
 
 ## 現有範圍
 
@@ -22,20 +22,20 @@ Engine 的邊界是執行一個 Agent 的一次 take。它目前不負責：
 - Knowledge Base 的匯入、索引與檢索
 - Bot 建立介面、部署、版本與回滾
 
-這些功能應由宿主處理，或在後續獨立的 Bot Runtime 實作，不放進單次 take 的執行核心。
+這些功能應由後續的 Host、Channel、Router、Session 與 Policy 處理，不放進單次 take 的執行核心。
 
 ## 想解決的使用情境
 
-目標使用方式是讓開發者建立一個 Bot 定義，選擇 Agent、工具與知識來源，再把同一套 Bot 邏輯接到不同通訊軟體：
+目標使用方式是讓開發者建立 Agent，注入負責執行的 Engine，再透過 Host、Route 與 Channel 接到不同通訊軟體：
 
 ```text
 Slack / Teams / LINE
           │
           ▼
-    Channel Adapter       尚未實作
+        Channel           尚未實作
           │
           ▼
-      Bot Runtime         尚未實作
+   Host / Router / Route  尚未實作
           │
           ▼
      agent-engine         已實作，仍需真實 Bot 驗證
@@ -60,13 +60,13 @@ Slack / Teams / LINE
 
 1. 用一條真實 Bot 流程驗證 `agent-engine`，比對新舊結果、取消、逾時和產物行為。
 2. 通過後再遷移其餘 take，確認 engine API 足以支援實際流程。
-3. 定義最小的訊息與 Bot Runtime contract，先接一個 Slack Bot。
-4. 再建立一個較簡單的 Bot；如果它仍需要修改 engine，表示共用邊界還沒有穩定。
-5. 第二個 Bot 能只靠設定和少量業務程式建立後，再考慮 Teams、Knowledge Provider、Blueprint 或管理介面。
+3. 定義最小的 Channel、Route、Session 與 Policy contract，先完成 Terminal Channel。
+4. 接入第一個正式通訊 Channel，確認不需要修改 Engine。
+5. 第二個 Agent 能只靠設定和少量程式接入後，再考慮 Teams、KnowledgeSource 或管理介面。
 
 近期不打算自建完整 workflow engine、統一聊天 UI、模型託管服務或向量資料庫。
 
-較完整的 Terminal-first 開發流程與預計 API，見 [Bot Library 預計使用流程](docs/bot-library-usage.md)。
+核心詞彙與責任見 [命名與責任邊界](docs/naming-and-boundaries.md)；較完整的 Terminal-first 開發流程見 [預計使用流程](docs/bot-library-usage.md)。
 
 ## 開始使用目前的 Engine
 

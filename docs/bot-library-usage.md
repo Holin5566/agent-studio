@@ -1,5 +1,7 @@
 # Bot Library 預計使用流程
 
+> 本文件保留早期的流程與功能構想，其中 `Bot Runtime`、`Director`、`Adapter`、`Conversation` 與 `Knowledge Provider` 等名稱尚未依最新決策重寫。正式命名與責任邊界以 [核心命名與責任邊界](naming-and-boundaries.md) 為準：Host 串接 Channel、Router、Route、Session、Policy 與 Agent，Engine 負責執行 Agent。
+
 狀態：規劃文件。本文描述預計的開發者體驗，不代表所有功能已經實作。
 
 目前已完成的範圍只有 `agent-engine` 與 `mcp-hub`。Bot Runtime、Terminal Adapter、Conversation、Knowledge Provider、Eval 及 Slack／Teams Adapter 仍待開發。
