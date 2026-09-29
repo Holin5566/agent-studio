@@ -2,7 +2,7 @@
  * 記憶體 `ArtifactStore`。測試的替身,以及「跑完就用掉」的宿主自己傳進來用。
  *
  * **它不持久化** —— 程序結束就沒了。engine 的預設是 `createFileStore`(寫在
- * `<root>/.agent-engine/artifacts`),不是這個:宿主可能靠 `latest()` 判斷要不要重跑,
+ * `<root>/.agent-core/artifacts`),不是這個:宿主可能靠 `latest()` 判斷要不要重跑,
  * 預設成記憶體版的話,一重啟就變成靜默的資料遺失。
  */
 import { EngineError, type ArtifactKey, type ArtifactRef, type ArtifactStore, type DraftRef } from '../types.js';

@@ -1,5 +1,5 @@
 /**
- * `createAgentEngine` —— 把前三塊接起來。
+ * `createAgentCore` —— 把 Agent 執行所需元件接起來。
  *
  * 建立時做完所有靜態檢查(載入、交叉驗證、能力協商),執行時只剩「跑一次」的
  * 紀律:事件編號、串流落盤、逾時、救援、產物提交、清理。
@@ -19,7 +19,7 @@ import { createSkillChecker } from './agents/skills.js';
 import { statusFor } from './run/status.js';
 import {
   EngineError,
-  type ArtifactRef, type Engine, type EngineConfig, type RunEvent, type RuntimeEvent,
+  type AgentCore, type AgentCoreConfig, type ArtifactRef, type RunEvent, type RuntimeEvent,
   type StopReason, type TakeResult, type TakeSpec, type Usage,
 } from './types.js';
 
@@ -94,7 +94,7 @@ function accumulate(into: Usage | undefined, e: Extract<RuntimeEvent, { type: 'u
   };
 }
 
-export function createAgentEngine(config: EngineConfig = {}): Engine {
+export function createAgentCore(config: AgentCoreConfig = {}): AgentCore {
   // 宣告了卻沒作用的欄位比沒有更糟:宿主會以為工具注入成功,模型卻永遠叫不到。
   if (config.builtinTools?.length) {
     throw new EngineError('config',
@@ -109,7 +109,7 @@ export function createAgentEngine(config: EngineConfig = {}): Engine {
   // 預設落地到檔案而不是記憶體:記憶體版一重啟就沒了,而宿主可能正靠 `latest()`
   // 判斷要不要重跑 —— 那會變成靜默的資料遺失,比多一個目錄糟得多。
   // 純粹跑完就丟的場景自己傳 `createMemoryStore()`。
-  const store = config.artifacts ?? createFileStore({ root: join(root, '.agent-engine', 'artifacts') });
+  const store = config.artifacts ?? createFileStore({ root: join(root, '.agent-core', 'artifacts') });
   const log = config.log ?? ((line: string) => process.stderr.write(line + '\n'));
   // 有內建預設,所以「宣告了 skills 卻忘了注入檢查」不再是一個會靜默略過的洞。
   const checkSkill = config.checkSkill ?? createSkillChecker({ projectDir: root });
@@ -313,3 +313,6 @@ export function createAgentEngine(config: EngineConfig = {}): Engine {
     },
   };
 }
+
+/** @deprecated 使用 `createAgentCore`。 */
+export const createAgentEngine = createAgentCore;

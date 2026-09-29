@@ -1,10 +1,10 @@
 # Bot Library 預計使用流程
 
-> 本文件保留早期的流程與功能構想，其中 `Bot Runtime`、`Director`、`Adapter`、`Conversation` 與 `Knowledge Provider` 等名稱尚未依最新決策重寫。正式命名與責任邊界以 [核心命名與責任邊界](naming-and-boundaries.md) 為準：Host 串接 Channel、Router、Route、Session、Policy 與 Agent，Engine 負責執行 Agent。
+> 本文件保留早期的流程與功能構想，其中 `Bot Runtime`、`Director`、`Adapter`、`Conversation` 與 `Knowledge Provider` 等名稱尚未依最新決策重寫。正式命名與責任邊界以 [核心命名與責任邊界](naming-and-boundaries.md) 為準：Agency 串接 Desk、Dispatcher、Assignment、Casebook、Policy 與 Agent，AgentCore 負責執行 Agent。
 
 狀態：規劃文件。本文描述預計的開發者體驗，不代表所有功能已經實作。
 
-目前已完成的範圍只有 `agent-engine` 與 `mcp-hub`。Bot Runtime、Terminal Adapter、Conversation、Knowledge Provider、Eval 及 Slack／Teams Adapter 仍待開發。
+目前已完成的範圍只有 `agent-core` 與 `mcp-hub`。Agency、Terminal Desk、Casebook、Archive、Eval 及 Slack／Teams Desk 仍待開發。
 
 ## 原則
 
@@ -19,7 +19,7 @@ Terminal
 Standard Message
    │
    ▼
-Bot Runtime → Director → agent-engine → mcp-hub → MCP servers
+Agency → Dispatcher → agent-core → mcp-hub → MCP servers
    │
    ▼
 Standard Response
@@ -82,7 +82,7 @@ budget:
 Runtime 實例不寫進 Agent manifest。宿主建立 Engine 時注入 Runtime Registry，Agent 只引用已註冊的 profile：
 
 ```ts
-const engine = createAgentEngine({
+const core = createAgentCore({
   runtimes: {
     claude: claudeRuntime({ settingsPath: './claude-settings.json' }),
     codex: codexRuntime({ configPath: './codex-config.toml' }),
@@ -97,7 +97,7 @@ const engine = createAgentEngine({
 ```text
 受信任的 take override
 → AgentDefinition.runtime
-→ EngineConfig.defaultRuntime
+→ AgentCoreConfig.defaultRuntime
 ```
 
 一般對話使用者不能指定 runtime override。Override 只供 eval、canary 或管理者測試使用。
@@ -145,7 +145,7 @@ retrieval:
   requireCitations: true
 ```
 
-Knowledge Provider 可以透過 `knowledge-search`、`knowledge-get` 等 MCP 工具提供給 Agent。文件匯入、chunk、embedding、索引更新與資料權限不是 `agent-engine` 的責任。
+Archive 可以透過 `knowledge-search`、`knowledge-get` 等 MCP 工具提供給 Agent。文件匯入、chunk、embedding、索引更新與資料權限不是 `agent-core` 的責任。
 
 ### 5. 定義 Bot
 
@@ -180,7 +180,7 @@ spec:
 收到訊息 → 組 prompt → runTake → 回覆
 ```
 
-複雜 Bot 使用程式化 Director，負責 route、reuse、fan-out、synth 與 verify。這些業務判斷不進 `agent-engine`。
+複雜流程由 Dispatcher 與業務程式負責 assignment、reuse、fan-out、synth 與 verify。這些業務判斷不進 `agent-core`。
 
 ### 6. 使用 Terminal 對話
 
@@ -228,7 +228,7 @@ ISSUE-1234 主要包含三項需求……
 agent-studio run --agent code-tracer --prompt "找出登入入口"
 ```
 
-直接測試 `agent-engine.runTake()`，適合驗證 Agent manifest、runtime、MCP、事件、逾時與 artifact。
+直接測試 `agent-core.runTake()`，適合驗證 Agent manifest、harness、MCP、事件、逾時與 artifact。
 
 ### Bot 對話
 
@@ -236,7 +236,7 @@ agent-studio run --agent code-tracer --prompt "找出登入入口"
 agent-studio chat --bot incident-helper
 ```
 
-走完整的 Terminal Adapter、Bot Runtime、Director 與 Agent Engine，適合測試多輪對話、使用者補充、進度、取消和 approval。
+走完整的 Terminal Desk、Agency、Dispatcher 與 AgentCore，適合測試多輪對話、使用者補充、進度、取消和 approval。
 
 ### Eval
 
@@ -406,7 +406,7 @@ agent-studio chat --bot incident-helper --channel-profile slack
 
 ## 預計實作順序
 
-1. 現有 `agent-engine` CLI 與真實 Bot 流程驗證。
+1. 現有 `agent-core` CLI 與真實流程驗證。
 2. Standard Message、BotResponse 與 Terminal Adapter。
 3. `simple` Director 與最小 Bot Runtime。
 4. 複雜 Director 接入。

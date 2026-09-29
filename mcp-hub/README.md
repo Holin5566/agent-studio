@@ -4,12 +4,12 @@ MCP gateway:把多台上游 MCP server 合成一台，只對呼叫端露出**允
 
 允許清單外的工具不會出現在 `tools/list`,`tools/call` 也直接拒絕、不轉發上游 —— 限制在協議層，不是在 prompt 裡拜託模型。
 
-依賴方向:`host → agent-engine → mcp-hub`。hub **不知道 agent 是什麼**:允許清單由呼叫端(agent-engine 從 agent manifest 算)傳進來。
+依賴方向:`agency → agent-core → mcp-hub`。hub **不知道 agent 是什麼**:允許清單由呼叫端(agent-core 從 agent manifest 算)傳進來。
 
 ## 入口
 
 ```bash
-# stdio gateway(agent-engine 每個 take 拉起一個)
+# stdio gateway(agent-core 每個 take 拉起一個)
 node dist/bin/entry.js --tools issue-get,browser-navigate
 node dist/bin/entry.js --all-tools        # 開發用,必須明寫
 
@@ -41,11 +41,11 @@ hub 只讀宿主的 `manifests/mcp-servers/*.json`,一台 server 一個檔:
 
 **上游故障時:** `tools/list` 平行問每台 server;連不上的那台只拿掉它自己的工具(gateway 的 stderr 會記一行「略過 …」),其他照常。**全部**連不上才整個失敗。上游連得上、卻沒有 manifest 宣告的工具,仍然整個失敗 —— 那是設定錯,不是暫時故障。
 
-模型看到的工具名是 `mcp__agent-engine-gateway__<tool id>`。`GATEWAY_SERVER_NAME` 刻意沿用 `agent-engine-gateway`,改它等於改所有 prompt 點名的工具名。
+模型看到的工具名是 `mcp__agent-core-gateway__<tool id>`。這個名稱屬於 prompt 可見契約，後續變更需要 migration。
 
 ## 專案根
 
-`manifests/` 從 `MCP_HUB_ROOT` 找;沒設就用 `AGENT_ENGINE_ROOT`(engine 拉起 gateway 時設的)，都沒有才用 cwd。
+`manifests/` 從 `MCP_HUB_ROOT` 找；沒設就用 AgentCore 傳入的 `AGENT_CORE_ROOT`，再退回舊版 `AGENT_ENGINE_ROOT`，都沒有才用 cwd。
 
 ## 信任模型
 

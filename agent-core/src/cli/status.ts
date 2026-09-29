@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * `npm --prefix agent-engine run status [-- --dial] [-- --json]`
+ * `npm --prefix agent-core run status [-- --dial] [-- --json]`
  *
  * 一次看清楚:hub 宣告了哪些上游、每台開放哪些工具、哪些 agent 在用、哪裡對不上。
  *
@@ -8,7 +8,7 @@
  * agent 是什麼(允許清單由 engine 算好再交給它)。
  *
  * 預設只讀宣告(不連線、不需要任何環境變數);`--dial` 才實際撥號(同 `mcp-hub check`,
- * stdio 上游的 `${VAR}` 要先載入環境)。專案根:`MCP_HUB_ROOT` ?? `AGENT_ENGINE_ROOT` ?? cwd。
+ * stdio 上游的 `${VAR}` 要先載入環境)。專案根:`MCP_HUB_ROOT` ?? `AGENT_CORE_ROOT` ?? cwd。
  */
 import { join, resolve } from 'node:path';
 import { checkServers, loadCatalog, type Catalog, type ServerCheck } from 'mcp-hub';
@@ -73,7 +73,7 @@ export function renderStatus(r: StatusReport): string {
 
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
-  const root = resolve(process.env.MCP_HUB_ROOT ?? process.env.AGENT_ENGINE_ROOT ?? process.cwd());
+  const root = resolve(process.env.MCP_HUB_ROOT ?? process.env.AGENT_CORE_ROOT ?? process.env.AGENT_ENGINE_ROOT ?? process.cwd());
   const catalog = loadCatalog(join(root, 'manifests', 'mcp-servers'));
   const { manifests, errors } = loadManifestsLenient(join(root, 'manifests'));
   const checks = argv.includes('--dial') ? await checkServers({}) : undefined;

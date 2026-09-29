@@ -20,7 +20,7 @@ export type { ServeBuiltinStdioOpts, BuiltinStdioServer } from './builtin/stdio.
 export { ToolFailure } from './types.js';
 export type { BuiltinTool, InputSchema } from './types.js';
 
-// agent-engine 用這些把 agent manifest 的 tools 驗成允許清單,再用 `--tools` 交給 gateway。
+// agent-core 用這些把 agent manifest 的 tools 驗成允許清單,再用 `--tools` 交給 gateway。
 export { loadCatalog, resolveAllow, MCP_SERVERS_DIR } from './manifest/load.js';
 // agent manifest 也是手寫 JSON,同一個「重複 key 靜默後者勝」的坑。
 export { duplicateKeys } from './manifest/duplicateKeys.js';

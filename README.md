@@ -8,12 +8,12 @@ Agent Studio 目前是一組 TypeScript 套件，用來從後端程式啟動一�
 
 | 套件 | 已實作 | 文件 |
 |---|---|---|
-| `agent-engine` | Agent manifest、CLI runtime、執行、取消、逾時、事件、usage、partial output 與產物 | [README](agent-engine/README.md) |
+| `agent-core` | Agent manifest、CLI harness、執行、取消、逾時、事件、usage、partial output 與產物 | [README](agent-core/README.md) |
 | `mcp-hub` | 上游 MCP 連線、工具 catalog、工具 allowlist、轉發與連線清理 | [README](mcp-hub/README.md) |
 
-依賴方向是 `host → agent-engine → mcp-hub`。兩個套件放在相鄰目錄，透過 `file:../mcp-hub` 與 TypeScript project reference 建置。
+依賴方向是 `agency → agent-core → mcp-hub`。兩個套件放在相鄰目錄，透過 `file:../mcp-hub` 與 TypeScript project reference 建置。
 
-Engine 的邊界是執行一個 Agent 的一次 take。它目前不負責：
+AgentCore 的邊界是執行一個 Agent 的一次 take。它目前不負責：
 
 - Slack、Teams、LINE 等通訊軟體串接
 - Conversation、thread 或長期記憶
@@ -22,23 +22,23 @@ Engine 的邊界是執行一個 Agent 的一次 take。它目前不負責：
 - Knowledge Base 的匯入、索引與檢索
 - Bot 建立介面、部署、版本與回滾
 
-這些功能應由後續的 Host、Channel、Router、Session 與 Policy 處理，不放進單次 take 的執行核心。
+這些功能應由後續的 Agency、Desk、Dispatcher、Assignment、Casebook 與 Policy 處理，不放進單次 take 的執行核心。
 
 ## 想解決的使用情境
 
-目標使用方式是讓開發者建立 Agent，注入負責執行的 Engine，再透過 Host、Route 與 Channel 接到不同通訊軟體：
+目標使用方式是讓開發者建立 Agent，注入負責執行的 AgentCore，再透過 Agency、Assignment 與 Desk 接到不同通訊軟體：
 
 ```text
 Slack / Teams / LINE
           │
           ▼
-        Channel           尚未實作
+          Desk            尚未實作
           │
           ▼
-   Host / Router / Route  尚未實作
+ Agency / Dispatcher      尚未實作
           │
           ▼
-     agent-engine         已實作，仍需真實 Bot 驗證
+       agent-core         已實作，仍需真實流程驗證
           │
           ▼
        mcp-hub            已實作 tool allowlist
@@ -58,17 +58,17 @@ Slack / Teams / LINE
 
 ## 接下來的驗證順序
 
-1. 用一條真實 Bot 流程驗證 `agent-engine`，比對新舊結果、取消、逾時和產物行為。
-2. 通過後再遷移其餘 take，確認 engine API 足以支援實際流程。
-3. 定義最小的 Channel、Route、Session 與 Policy contract，先完成 Terminal Channel。
-4. 接入第一個正式通訊 Channel，確認不需要修改 Engine。
-5. 第二個 Agent 能只靠設定和少量程式接入後，再考慮 Teams、KnowledgeSource 或管理介面。
+1. 用一條真實流程驗證 `agent-core`，比對結果、取消、逾時和產物行為。
+2. 通過後再遷移其餘 take，確認 AgentCore API 足以支援實際流程。
+3. 定義最小的 Desk、Assignment、Case 與 Policy contract，先完成 Terminal Desk。
+4. 接入第一個正式通訊 Desk，確認不需要修改 AgentCore。
+5. 第二個 Agent 能只靠設定和少量程式接入後，再考慮 Teams、Archive 或管理介面。
 
 近期不打算自建完整 workflow engine、統一聊天 UI、模型託管服務或向量資料庫。
 
 核心詞彙與責任見 [命名與責任邊界](docs/naming-and-boundaries.md)；較完整的 Terminal-first 開發流程見 [預計使用流程](docs/bot-library-usage.md)。
 
-## 開始使用目前的 Engine
+## 開始使用目前的 AgentCore
 
 需要 Node.js 18 以上及 npm；實際執行 Claude agent 另需可用的 Claude CLI 與登入環境。
 
@@ -81,15 +81,15 @@ npm test
 測試包含模擬 runtime 與本機 MCP server，不需要真實模型帳號。宿主自行提供 agent manifest、prompt、workspace 及上游憑證；範例放在各套件的 `manifests/`。
 
 ```js
-const { createAgentEngine } = require('./agent-engine');
-const engine = createAgentEngine({ root: '/path/to/host' });
+const { createAgentCore } = require('./agent-core');
+const core = createAgentCore({ root: '/path/to/agency' });
 // 宿主在 manifests/agents/hello.json 宣告 { "id": "hello", "tools": [] }
 async function main() {
   try {
-    const result = await engine.runTake({ agent: 'hello', prompt: 'Hello' });
+    const result = await core.runTake({ agent: 'hello', prompt: 'Hello' });
     console.log(result.output);
   } finally {
-    await engine.close();
+    await core.close();
   }
 }
 main().catch(console.error);

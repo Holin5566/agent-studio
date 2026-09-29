@@ -6,16 +6,16 @@
  *
  * 三個呼叫端分別探測天花板、地板與可攜性。
  */
-import { createAgentEngine, codexCli } from '../index.js';
+import { createAgentCore, createAgentEngine, codexCli } from '../index.js';
 import type { ArtifactRef, DraftRef, ArtifactStore, RunEvent, TakeResult } from '../index.js';
 
 // ─── 地板:最小 caller ────────────────────────────────────────────────────
 // 除了什麼都不給以外,還要能一行拿到結果。這一段寫不出來就是 engine 沒做完自己
 // 那一半。
 export async function minimalCaller(): Promise<string> {
-  const engine = createAgentEngine();
-  const { output } = await engine.runTake({ agent: 'hello', prompt: '幫我看一下這段錯誤訊息' });
-  await engine.close();
+  const core = createAgentCore();
+  const { output } = await core.runTake({ agent: 'hello', prompt: '幫我看一下這段錯誤訊息' });
+  await core.close();
   return output;
 }
 

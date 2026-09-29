@@ -1,7 +1,7 @@
 /**
- * Engine 的公開介面。宿主只從這裡匯入。
+ * AgentCore 的公開介面。呼叫端只從這裡匯入。
  *
- * `createAgentEngine()` 在建立時就做完載入、交叉驗證與能力協商;執行期只剩
+ * `createAgentCore()` 在建立時就做完載入、交叉驗證與能力協商;執行期只剩
  * 「跑一次」的紀律。業務決策(路由、扇出、reuse、synth、人工 gate)不在這裡。
  */
 export type {
@@ -16,6 +16,8 @@ export type {
   CommandContext,
   Engine,
   EngineConfig,
+  AgentCore,
+  AgentCoreConfig,
   EngineErrorKind,
   PlanEntry,
   RunEvent,
@@ -30,9 +32,9 @@ export type {
   Usage,
 } from './types.js';
 
-export { EngineError } from './types.js';
+export { EngineError, EngineError as AgentCoreError } from './types.js';
 export { statusFor, isSalvageable } from './run/status.js';
-export { createAgentEngine } from './engine.js';
+export { createAgentCore, createAgentEngine } from './engine.js';
 export { createMemoryStore } from './artifacts/memory.js';
 export { createFileStore } from './artifacts/fileStore.js';
 export { createSkillChecker, resolveClaudeConfigDir } from './agents/skills.js';
@@ -51,6 +53,4 @@ export { GATEWAY_SERVER_NAME } from './shared/names.js';
 export { createClaudeDecoder } from './runtimes/claudeStream.js';
 export { codexCli, createCodexCli, sandboxFor } from './runtimes/codexCli.js';
 export type { CodexCliOptions } from './runtimes/codexCli.js';
-
-
 

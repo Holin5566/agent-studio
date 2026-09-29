@@ -364,9 +364,9 @@ describe('close() 的收尾', () => {
 
 describe('測試本身的衛生', () => {
   it('不把產物寫進原始碼樹', () => {
-    // 預設的檔案 store 會在 root 底下建 .agent-engine/。忘了傳 artifacts 的測試
+    // 預設的檔案 store 會在 root 底下建 .agent-core/。忘了傳 artifacts 的測試
     // 會靜靜污染 fixture 目錄 —— .gitignore 蓋掉它,所以 git status 也看不出來。
-    expect(existsSync(join(FIXTURE_ROOT, '.agent-engine'))).toBe(false);
+    expect(existsSync(join(FIXTURE_ROOT, '.agent-core'))).toBe(false);
   });
 });
 

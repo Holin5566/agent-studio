@@ -49,15 +49,19 @@ export function openGatewayConfig(o: OpenGatewayOpts): GatewaySession {
   if (!existsSync(GATEWAY_ENTRY)) {
     // 靜默失敗的話,CLI 會照跑但少一個工具,而 prompt 已經在叫模型用那個工具 ——
     // 結果是一份「查不到東西卻講得很有把握」的報告,比當場失敗難查得多。
-    throw new EngineError('config', `gateway entry 不存在 — ${GATEWAY_ENTRY}(先 build mcp-hub:agent-engine 的 npm run build 會一起帶到)`);
+    throw new EngineError('config', `gateway entry 不存在 — ${GATEWAY_ENTRY}(先 build mcp-hub:agent-core 的 npm run build 會一起帶到)`);
   }
 
-  const dir = mkdtempSync(join(tmpdir(), `agent-engine-${o.agentId}-`));
+  const dir = mkdtempSync(join(tmpdir(), `agent-core-${o.agentId}-`));
   const configPath = join(dir, 'mcp.json');
 
   // 只帶明確要給的,不把整包 process.env 複製進設定檔 —— 那會把憑證寫進
   // /tmp 的一個檔案裡。子程序本來就繼承得到父程序的環境。
-  const env: Record<string, string> = { AGENT_ENGINE_ROOT: o.root };
+  const env: Record<string, string> = {
+    AGENT_CORE_ROOT: o.root,
+    // 過渡相容：舊版 mcp-hub 只認這個名稱。
+    AGENT_ENGINE_ROOT: o.root,
+  };
   for (const [k, v] of Object.entries(o.env ?? {})) if (v !== undefined) env[k] = v;
 
   writeFileSync(configPath, JSON.stringify({

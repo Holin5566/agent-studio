@@ -3,5 +3,5 @@ dist/
 .env
 *.log
 .DS_Store
-.agent-engine/
+.agent-core/
 *.tsbuildinfo

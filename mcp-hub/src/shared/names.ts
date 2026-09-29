@@ -7,10 +7,10 @@
  */
 
 /** MCP gateway 的 server 名 = claude 的工具名前綴。 */
-export const GATEWAY_SERVER_NAME = 'agent-engine-gateway';
+export const GATEWAY_SERVER_NAME = 'agent-core-gateway';
 
 /** 內建工具 server 的自我識別名(不影響工具名前綴 —— 它掛在 gateway 後面)。 */
-export const BUILTIN_SERVER_NAME = 'agent-engine-builtin';
+export const BUILTIN_SERVER_NAME = 'agent-core-builtin';
 
 /** 這包程式在 MCP 握手時的版本號。 */
 export const PROTOCOL_VERSION = '0.1.0';

@@ -2,10 +2,10 @@
   "name": "agent-studio",
   "version": "0.2.0",
   "private": true,
-  "description": "Runtime and MCP gateway for building tool-using bots",
+  "description": "Agent core and MCP gateway for building messaging agents",
   "scripts": {
-    "setup": "npm --prefix mcp-hub ci && npm --prefix agent-engine ci",
-    "build": "npm --prefix agent-engine run build",
-    "test": "npm --prefix mcp-hub test && npm --prefix agent-engine test"
+    "setup": "npm --prefix mcp-hub ci && npm --prefix agent-core ci",
+    "build": "npm --prefix agent-core run build",
+    "test": "npm --prefix mcp-hub test && npm --prefix agent-core test"
   }
 }

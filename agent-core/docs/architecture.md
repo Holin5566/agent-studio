@@ -1,4 +1,4 @@
-# Agent Engine 架構
+# AgentCore 架構
 
 ## Take
 
@@ -17,7 +17,7 @@ Take 是一個 Agent 的一次執行。`runTake` 會：
 
 Director 位於宿主。它決定要執行哪些 take、是否平行、何時重用結果、何時等待人工輸入，以及如何整合多次執行。
 
-Agent Engine 不定義通用 workflow DSL，避免把特定 Bot 的流程變成所有呼叫端都必須實作的欄位。
+AgentCore 不定義通用 workflow DSL，避免把特定 Agency 的流程變成所有呼叫端都必須實作的欄位。
 
 ## Runtime
 
@@ -33,12 +33,12 @@ Runtime 必須：
 
 ## Artifact
 
-Engine 先將串流輸出寫入 draft。正常完成或 salvage 判斷通過後才 commit；錯誤和取消不產生正式 artifact。
+AgentCore 先將串流輸出寫入 draft。正常完成或 salvage 判斷通過後才 commit；錯誤和取消不產生正式 artifact。
 
 Artifact Store 可替換，讓宿主選擇本機檔案、記憶體或其他儲存方式，而不改變 take lifecycle。
 
 ## MCP Hub
 
-Engine 從 Agent manifest 計算工具允許清單，再交給 MCP Hub。Hub 只列出被允許的工具，呼叫未授權工具時直接拒絕，不轉發上游。
+AgentCore 從 Agent manifest 計算工具允許清單，再交給 MCP Hub。Hub 只列出被允許的工具，呼叫未授權工具時直接拒絕，不轉發上游。
 
 MCP allowlist 限制模型透過 gateway 使用的工具。它不限制具有 Shell 能力的程序自行讀檔或連網，因此不能取代 OS sandbox。

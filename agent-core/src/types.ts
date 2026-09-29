@@ -455,3 +455,9 @@ export interface Engine {
   /** 等待所有子程序與上游連線清理完成。有限的關閉期限。關閉後 `runTake` 一律拒絕。 */
   close(): Promise<void>;
 }
+
+/** Agent Studio 對外的執行核心。`Engine` 保留為舊版相容名稱。 */
+export type AgentCore = Engine;
+
+/** 建立 AgentCore 的設定。`EngineConfig` 保留為舊版相容名稱。 */
+export type AgentCoreConfig = EngineConfig;
