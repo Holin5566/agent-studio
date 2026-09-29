@@ -38,6 +38,7 @@ describe('per-take gateway 設定', () => {
   it('子程序被告知要用哪個專案根找 manifests', () => {
     const s = openGatewayConfig({ agentId: 'limited', tools: ['up-echo'], root: FIXTURE_ROOT });
     try {
+      expect(serverOf(s.configPath!).env.AGENT_CORE_ROOT).toBe(FIXTURE_ROOT);
       expect(serverOf(s.configPath!).env.AGENT_ENGINE_ROOT).toBe(FIXTURE_ROOT);
       expect(serverOf(s.configPath!).args).toEqual([GATEWAY_ENTRY, '--tools', 'up-echo']);
     } finally { s.close(); }

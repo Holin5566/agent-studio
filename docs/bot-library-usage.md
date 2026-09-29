@@ -79,7 +79,7 @@ budget:
   maxOutputBytes: 100000
 ```
 
-Runtime 實例不寫進 Agent manifest。宿主建立 Engine 時注入 Runtime Registry，Agent 只引用已註冊的 profile：
+Harness 實例不寫進 Agent manifest。Agency 建立 AgentCore 時注入內部 registry，Agent 只引用已註冊的 profile：
 
 ```ts
 const core = createAgentCore({

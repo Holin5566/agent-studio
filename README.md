@@ -11,7 +11,7 @@ JackIn 目前是一組 TypeScript 套件，用來從後端程式啟動一次 CLI
 | `agent-core` | Agent manifest、CLI harness、執行、取消、逾時、事件、usage、partial output 與產物 | [README](agent-core/README.md) |
 | `mcp-hub` | 上游 MCP 連線、工具 catalog、工具 allowlist、轉發與連線清理 | [README](mcp-hub/README.md) |
 
-依賴方向是 `agency → agent-core → mcp-hub`。兩個套件放在相鄰目錄，透過 `file:../mcp-hub` 與 TypeScript project reference 建置。
+依賴方向是 `jackin → agent-core → mcp-hub`。兩個套件放在相鄰目錄，透過 `file:../mcp-hub` 與 TypeScript project reference 建置。
 
 AgentCore 的邊界是執行一個 Agent 的一次 take。它目前不負責：
 
@@ -82,7 +82,7 @@ npm test
 
 ```js
 const { createAgentCore } = require('./agent-core');
-const core = createAgentCore({ root: '/path/to/agency' });
+const core = createAgentCore({ root: '/path/to/jackin' });
 // 宿主在 manifests/agents/hello.json 宣告 { "id": "hello", "tools": [] }
 async function main() {
   try {

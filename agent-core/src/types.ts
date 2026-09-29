@@ -381,7 +381,7 @@ export interface TakeResult {
   salvaged?: boolean;
 }
 
-// ─── Engine ──────────────────────────────────────────────────────────────
+// ─── AgentCore ───────────────────────────────────────────────────────────
 
 export interface SkillAvailability {
   available: boolean;
@@ -389,8 +389,8 @@ export interface SkillAvailability {
   reason: string;
 }
 
-export interface EngineConfig {
-  /** `manifests/` 在哪。省略 = `AGENT_ENGINE_ROOT` ?? cwd。建議明寫。 */
+export interface AgentCoreConfig {
+  /** `manifests/` 在哪。省略 = `AGENT_CORE_ROOT` ?? cwd。建議明寫。 */
   root?: string;
   /**
    * 這個 engine 只准用這幾個 agent(其他 id 的 take 直接拒絕)。省略 = `manifests/` 裡的
@@ -412,7 +412,7 @@ export interface EngineConfig {
   /** 允許 `experimental` 的 runtime(開發 adapter 本身時才用)。省略 = 拒絕。 */
   allowExperimentalRuntime?: boolean;
   /**
-   * **目前不支援,傳了會在 `createAgentEngine()` 當場丟 `EngineError('config')`。**
+   * **目前不支援,傳了會在 `createAgentCore()` 當場丟 `AgentCoreError('config')`。**
    *
    * gateway 是 `claude -p` 以 stdio 拉起的另一個程序,收不到宿主的 JS 物件,所以
    * 這裡注入的實作到不了模型手上。宿主的工具請做成 stdio MCP server,在
@@ -440,11 +440,11 @@ export interface EngineConfig {
 
 /**
  * **建立時不做任何 IO**:manifest 在每個 agent 第一次 `runTake` 時才載入並驗證,所以宿主
- * 可以在 module 頂層 `export const engine = createAgentEngine(...)`,import 沒有副作用。
+ * 可以在 module 頂層 `export const core = createAgentCore(...)`,import 沒有副作用。
  * 一份 manifest 壞掉只讓那個 agent 的 take 被拒(`EngineError` config / capability,
  * 在 spawn 之前),同一個 engine 上的其他 agent 照常。
  */
-export interface Engine {
+export interface AgentCore {
   /** agent 的 manifest 載入或驗證失敗 → reject `EngineError`(不發事件、不 spawn),修好檔案下次會重試。 */
   runTake(spec: TakeSpec): Promise<TakeResult>;
   /**
@@ -456,8 +456,8 @@ export interface Engine {
   close(): Promise<void>;
 }
 
-/** JackIn 對外的執行核心。`Engine` 保留為舊版相容名稱。 */
-export type AgentCore = Engine;
+/** @deprecated 使用 `AgentCore`。 */
+export type Engine = AgentCore;
 
-/** 建立 AgentCore 的設定。`EngineConfig` 保留為舊版相容名稱。 */
-export type AgentCoreConfig = EngineConfig;
+/** @deprecated 使用 `AgentCoreConfig`。 */
+export type EngineConfig = AgentCoreConfig;

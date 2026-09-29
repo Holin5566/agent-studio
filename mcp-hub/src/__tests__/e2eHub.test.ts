@@ -39,7 +39,7 @@ const ALLOW = {
 };
 
 async function openOnFixture(tools: string[], builtinTools: BuiltinTool[] = []): Promise<Hub> {
-  process.env.AGENT_ENGINE_ROOT = FIXTURE;
+  process.env.AGENT_CORE_ROOT = FIXTURE;
   vi.resetModules();
   const { openGateway } = await import('../hub.js');
   return openGateway({
@@ -54,7 +54,7 @@ let hub: Hub | undefined;
 afterEach(async () => {
   await hub?.close().catch(() => {});
   hub = undefined;
-  delete process.env.AGENT_ENGINE_ROOT;
+  delete process.env.AGENT_CORE_ROOT;
   vi.resetModules();
 });
 

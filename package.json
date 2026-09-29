@@ -5,7 +5,7 @@
   "description": "JackIn: Cybernetic dispatch and execution framework for autonomous agents",
   "scripts": {
     "setup": "npm --prefix mcp-hub ci && npm --prefix agent-core ci",
-    "build": "npm --prefix agent-core run build",
+    "build": "npm --prefix mcp-hub run build && npm --prefix agent-core run build",
     "test": "npm --prefix mcp-hub test && npm --prefix agent-core test"
   }
 }
